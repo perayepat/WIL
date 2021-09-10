@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Water_Volume
   - Game Manager
+  - Keycard
   layers:
   - Default
   - TransparentFX
@@ -17,9 +18,9 @@ TagManager:
   - Environment
   - UnderWater
   - Desert
-  - 
-  - 
-  - 
+  - Grab Item
+  - Dome
+  - Keypad_Button
   - 
   - 
   - 

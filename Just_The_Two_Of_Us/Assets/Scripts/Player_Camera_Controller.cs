@@ -31,8 +31,9 @@ public class Player_Camera_Controller : MonoBehaviour
     {
         PlayerInput();
 
-        playerCam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+        //This is also used for initial spawn rotation (+180)
+        playerCam.transform.rotation = Quaternion.Euler(xRotation, yRotation + 180, 0);
+        orientation.transform.rotation = Quaternion.Euler(0, yRotation + 180, 0);
 
 
         if (Input.GetKeyDown(KeyCode.Escape))

@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Player_Controller_Script : MonoBehaviour
 {
     [SerializeField] Transform orientation;
+    [SerializeField] Transform playerCam;
     float playerHeight = 2f;
 
     [Header("Movement")]
@@ -19,8 +21,13 @@ public class Player_Controller_Script : MonoBehaviour
     [Header("Jumping")]
     public float jumpForce = 15f;
 
+    [Header("Swiming")]
+    public float swimUpSpeed = 7f;
+
     [Header("KeyBinds")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] KeyCode grabKey = KeyCode.E;
+    [SerializeField] KeyCode pressButtonKey = KeyCode.Mouse0;
 
     [Header("Drag")]
     public float groundedDrag = 6f;
@@ -28,7 +35,29 @@ public class Player_Controller_Script : MonoBehaviour
     public float swimDrag = 2f;
     public float zero_G_Drag = 0f;
 
-    [Header("Grounded")]
+    [Header("Gravity")]
+    [Range(1.0f, 9.81f)]
+    [SerializeField] float gravityMultiplier = 1f;
+
+    [Header("Grab/Pickup")]
+    public Transform grabPoint;
+    public Rigidbody grabItem;
+    Outline tempHolderG;
+    [SerializeField] float grabHoldDist = 1.5f;
+    [SerializeField] bool canGrab;
+    [SerializeField] bool holding = false;
+    [SerializeField] bool grabDelay = false;
+    [SerializeField] LayerMask grabItemMask;
+
+    [Header("Keypad")]
+    [SerializeField] LayerMask pressButtonMask;
+    [SerializeField] bool canPressButton;
+    Outline tempHolderK;
+
+    [Header("UI")]
+    [SerializeField] TextMeshProUGUI Interact_Grab_UI;
+    [SerializeField] TextMeshProUGUI Interact_PressButton_UI;
+
     bool isGrounded;
     float groundDist = 0.4f;
     [SerializeField] LayerMask groundMask;
@@ -76,31 +105,144 @@ public class Player_Controller_Script : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        Interact_Grab_UI.enabled = false;
+        Interact_PressButton_UI.enabled = false;
     }
 
 
     private void Update()
     {
+        //Ground Check
         isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, 1, 0), groundDist, groundMask);
 
-        PlayerInput();
+
+
+        //Keypad Button Press Logic
+        KeypadButtonPress();
+
+
+
+        //Pickup/Interact Check
+        RaycastHit hit;
+        canGrab = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2.5f, grabItemMask);
+        if (canGrab)
+        {
+            tempHolderG = hit.collider.GetComponent<Outline>();
+        }
+
+
+        PlayerInput(hit);
         ControlDrag();
 
         if (Input.GetKeyDown(jumpKey) && isGrounded)
         {
             Jump();
         }
+        else if (Input.GetKey(jumpKey) && playerState == PlayerState.Swim)
+        {
+            SwimUp();
+        }
 
         slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
+
+
+
+        //Update Grab/Pickup UI
+        if (canGrab && holding == false)
+        {
+            Interact_Grab_UI.enabled = true;
+            tempHolderG.GetComponent<Outline>().OutlineWidth = 4;
+        }
+        else
+        {
+            Interact_Grab_UI.enabled = false;
+            if (tempHolderG)
+            {
+                tempHolderG.GetComponent<Outline>().OutlineWidth = 0;
+            }
+
+        }
+        //Update Grabbed item pos if holding
+        if(holding && grabItem != null)
+        {
+            //grabItem.MovePosition(grabPoint.position);
+            //grabItem.transform.position = grabPoint.position;
+            grabItem.velocity = 50 * (grabPoint.position - grabItem.transform.position);
+        }
     }
 
 
-    void PlayerInput()
+    void KeypadButtonPress()
+    {
+        RaycastHit hit;
+        canPressButton = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2.5f, pressButtonMask);
+
+        //Update Player UI
+        if (canPressButton)
+        {
+            Interact_PressButton_UI.enabled = true;
+            tempHolderK = hit.collider.GetComponent<Outline>();
+            tempHolderK.OutlineWidth = 4;
+        }
+        else
+        {
+            Interact_PressButton_UI.enabled = false;
+            if (tempHolderK)
+            {
+                tempHolderK.OutlineWidth = 0;
+            }
+
+        }
+
+        //Logic
+        if (canPressButton && Input.GetKeyDown(pressButtonKey))
+        {
+            Keypad_Button_Script KB = hit.collider.GetComponent<Keypad_Button_Script>();
+            string keyValue = KB.keypad_Num.ToString();
+            KB.ReturnKeyPadObj().AppendKeypadInput(keyValue);
+        }
+    }
+
+
+    void PlayerInput(RaycastHit hit)
     {
         horiMovement = Input.GetAxisRaw("Horizontal");
         vertMovement = Input.GetAxisRaw("Vertical");
 
         moveDirection = orientation.forward * vertMovement + orientation.right * horiMovement;
+
+
+        if (Input.GetAxis("Mouse ScrollWheel") != 0f) // forward
+        {
+            grabHoldDist += Input.GetAxis("Mouse ScrollWheel");
+            grabHoldDist = Mathf.Clamp(grabHoldDist, 0.8f, 1.5f);
+        }
+
+        grabPoint.localPosition = new Vector3(0, 0, grabHoldDist);
+
+
+        //For Grabbing Items
+        if (Input.GetKeyDown(grabKey) && canGrab && grabDelay == false && holding == false)
+        {
+            grabHoldDist = 1.5f;
+            grabItem = hit.rigidbody;
+            grabItem.useGravity = false;
+            //grabItem.GetComponent<BoxCollider>().isTrigger = true;
+            holding = true;
+
+            StopCoroutine(GrabDelay());
+            StartCoroutine(GrabDelay());
+        }
+        else if(Input.GetKeyDown(grabKey) && holding && grabDelay == false)
+        {
+            grabItem.useGravity = true;
+            //grabItem.GetComponent<BoxCollider>().isTrigger = false;
+            holding = false;
+            grabItem = null;
+
+            StopCoroutine(GrabDelay());
+            StartCoroutine(GrabDelay());
+        }
     }
     void ControlDrag()
     {
@@ -115,7 +257,7 @@ public class Player_Controller_Script : MonoBehaviour
             {
                 rb.drag = airDrag;
                 moveSpeed = airSpeed;
-                rb.AddForce(-orientation.up * 9.81f, ForceMode.Force);
+                rb.AddForce(-orientation.up * gravityMultiplier, ForceMode.Force);
             }
         }
         else if (playerState == PlayerState.Swim)
@@ -161,6 +303,13 @@ public class Player_Controller_Script : MonoBehaviour
             rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         }
     }
+    void SwimUp()
+    {
+        if (playerState == PlayerState.Swim)
+        {
+            rb.AddForce(transform.up * swimUpSpeed, ForceMode.Force);
+        }
+    }
 
 
     //Checks if player is under water
@@ -179,6 +328,16 @@ public class Player_Controller_Script : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        playerState = PlayerState.Walk;
+        if (other.tag == "Water_Volume")
+        {
+            playerState = PlayerState.Walk;
+        }
+    }
+
+    IEnumerator GrabDelay()
+    {
+        grabDelay = true;
+        yield return new WaitForSeconds(0.2f);
+        grabDelay = false;
     }
 }
