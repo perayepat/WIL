@@ -7,6 +7,7 @@ TagManager:
   - Water_Volume
   - Game Manager
   - Keycard
+  - Elevator_Collision_Trigger
   layers:
   - Default
   - TransparentFX
@@ -21,9 +22,9 @@ TagManager:
   - Grab Item
   - Dome
   - Keypad_Button
-  - 
-  - 
-  - 
+  - Elevator_Travel_Keypad_Button
+  - BlackHole_Ring
+  - Elevator_ICE_DOME_EXIT
   - 
   - 
   - 
