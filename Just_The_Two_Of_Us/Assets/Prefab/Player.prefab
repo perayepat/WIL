@@ -221,16 +221,56 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 5632292485790026309}
+  playerCam: {fileID: 0}
   moveSpeed: 6
+  walkSpeed: 6
+  airSpeed: 2
+  zero_G_Speed: 2
+  swimSpeed: 1
   movementMultiplier: 10
   airMovementMultiplier: 5
-  jumpForce: 15
+  sitting_Elevator: 0
+  jumpForce: 20
+  swimUpSpeed: 7
   jumpKey: 32
+  grabKey: 101
+  pressButtonKey: 323
   groundedDrag: 6
   airDrag: 1
+  swimDrag: 2
+  zero_G_Drag: 0
+  fallingDrag: 0
+  gravityMultiplier: 9.81
+  grabPoint: {fileID: 0}
+  grabItem: {fileID: 0}
+  grabHoldDist: 1.5
+  canGrab: 0
+  holding: 0
+  grabDelay: 0
+  grabItemMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  pressButtonMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  pressElevatorTravelButtonMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  pressElevatorICEDOWE_EXITButtonMask:
+    serializedVersion: 2
+    m_Bits: 32768
+  canPressButton: 0
+  blackHoleRingMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  canInteractWithRing: 0
+  Interact_Grab_UI: {fileID: 0}
+  Interact_PressButton_UI: {fileID: 0}
+  elevatorSeat: {fileID: 0}
   groundMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1216
+  playerState: 0
 --- !u!114 &5632292486403909384
 MonoBehaviour:
   m_ObjectHideFlags: 0

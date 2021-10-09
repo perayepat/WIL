@@ -5,10 +5,14 @@ using TMPro;
 
 public class Game_Manager : MonoBehaviour
 {
+    [Header("Player/Spawn Data")]
     [SerializeField] GameObject playerObj;
     [SerializeField] GameObject spawnResPoint;
+    public Transform iceDomeSpawnPoint;
+    public Transform mainHubSpawnPoint;
     public bool spawnPlayerAtResPoint = false;
 
+    [Header("Temperature Data")]
     public float currentTemperature = -10;
     [SerializeField] float TempIncreaseInterval_sec = 5;
     [SerializeField] float worldTime = 0;
@@ -25,6 +29,11 @@ public class Game_Manager : MonoBehaviour
             Vector3 offset = new Vector3(0, 2, 0);
             playerObj.transform.position = spawnResPoint.transform.position + offset;
         }
+        else
+        {
+            Vector3 offset = new Vector3(0, 2, 0);
+            playerObj.transform.position = iceDomeSpawnPoint.transform.position + offset;
+        }
     }
 
     // Update is called once per frame
@@ -39,6 +48,16 @@ public class Game_Manager : MonoBehaviour
             time = 0;
 
             temperature_UI.text = currentTemperature.ToString("00");
+        }
+    }
+
+
+    public void NewPlayerPosition(Transform newPos)
+    {
+        if (playerObj != null)
+        {
+            Vector3 offset = new Vector3(0, 2, 0);
+            playerObj.transform.position = newPos.position + offset;
         }
     }
 }

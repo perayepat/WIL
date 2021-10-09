@@ -5,6 +5,8 @@ using TMPro;
 
 public class Player_Controller_Script : MonoBehaviour
 {
+    Event_Manager event_Manager;
+
     [SerializeField] Transform orientation;
     [SerializeField] Transform playerCam;
     float playerHeight = 2f;
@@ -17,6 +19,8 @@ public class Player_Controller_Script : MonoBehaviour
     [SerializeField] float swimSpeed = 2f;
     public float movementMultiplier = 10f;
     [SerializeField] float airMovementMultiplier = 0.4f;
+    bool falling = false;
+    public bool sitting_Elevator = false;
 
     [Header("Jumping")]
     public float jumpForce = 15f;
@@ -34,6 +38,7 @@ public class Player_Controller_Script : MonoBehaviour
     public float airDrag = 2f;
     public float swimDrag = 2f;
     public float zero_G_Drag = 0f;
+    public float fallingDrag = 0f;
 
     [Header("Gravity")]
     [Range(1.0f, 9.81f)]
@@ -51,12 +56,28 @@ public class Player_Controller_Script : MonoBehaviour
 
     [Header("Keypad")]
     [SerializeField] LayerMask pressButtonMask;
+    [SerializeField] LayerMask pressElevatorTravelButtonMask;
+    [SerializeField] LayerMask pressElevatorICEDOWE_EXITButtonMask;
     [SerializeField] bool canPressButton;
-    Outline tempHolderK;
+    [SerializeField] bool canPressElevatorTravelButton;
+    [SerializeField] bool canPressICEDOWE_EXITButton;
+    Outline tempHolder_Kp;
+    Outline tempHolder_ETB;
+    Outline tempHolderK_IDEB;
+
+    [Header("BlackHole_Puzzle")]
+    [SerializeField] LayerMask blackHoleRingMask;
+    [SerializeField] bool canInteractWithRing;
+    BlackHole_Ring_Script temp_Blackhole_Script;
+    Outline temp_Blackhole_RingOutline;
 
     [Header("UI")]
     [SerializeField] TextMeshProUGUI Interact_Grab_UI;
     [SerializeField] TextMeshProUGUI Interact_PressButton_UI;
+
+    [Header("Elevator_Desert_Dome")]
+    [SerializeField] Transform elevatorSeat;
+
 
     bool isGrounded;
     float groundDist = 0.4f;
@@ -107,6 +128,8 @@ public class Player_Controller_Script : MonoBehaviour
         rb.freezeRotation = true;
         Interact_Grab_UI.enabled = false;
         Interact_PressButton_UI.enabled = false;
+
+        event_Manager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<Event_Manager>();
     }
 
 
@@ -116,9 +139,30 @@ public class Player_Controller_Script : MonoBehaviour
         isGrounded = Physics.CheckSphere(transform.position - new Vector3(0, 1, 0), groundDist, groundMask);
 
 
+        //UI Check
+        if(!canPressButton && !canPressElevatorTravelButton && !canPressICEDOWE_EXITButton && !canInteractWithRing)
+        {
+            Interact_PressButton_UI.enabled = false;
+        }
+
 
         //Keypad Button Press Logic
         KeypadButtonPress();
+
+
+        //ICE DOME Elevator Exit Keypad Logic
+        InteractICEDOME_Exit_Button();
+
+        //BlackHole Ring Interaction
+        InteractWithBlackHoleRing();
+
+
+        //Elevator Button Press Logic
+        ElevatorTravelKeypadButton_Press();
+        if(sitting_Elevator == true)
+        {
+            Sit_In_Elevator();
+        }
 
 
 
@@ -172,6 +216,81 @@ public class Player_Controller_Script : MonoBehaviour
     }
 
 
+
+    void InteractICEDOME_Exit_Button()
+    {
+        RaycastHit hit;
+        canPressICEDOWE_EXITButton = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 1f, pressElevatorICEDOWE_EXITButtonMask);
+
+        //Update Player UI
+        if (canPressICEDOWE_EXITButton)
+        {
+            Interact_PressButton_UI.enabled = true;
+            tempHolderK_IDEB = hit.collider.GetComponent<Outline>();
+            tempHolderK_IDEB.OutlineWidth = 4;
+        }
+        else
+        {
+            //Interact_PressButton_UI.enabled = false;
+            if (tempHolderK_IDEB)
+            {
+                tempHolderK_IDEB.OutlineWidth = 0;
+            }
+
+        }
+
+        //Logic
+        if (canPressICEDOWE_EXITButton && Input.GetKeyDown(pressButtonKey))
+        {
+            Elevator_Travel_Button_Script _Travel_Button_Script = hit.collider.GetComponent<Elevator_Travel_Button_Script>();
+
+            if (_Travel_Button_Script.travelValue == "Down")
+            {
+                event_Manager.Exit_ICE_DOME();
+            }
+
+        }
+    }
+
+
+    void InteractWithBlackHoleRing()
+    {
+        RaycastHit hit;
+        canInteractWithRing = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2.5f, blackHoleRingMask);
+
+        //Update Player UI
+        if (canInteractWithRing)
+        {
+            Interact_PressButton_UI.enabled = true;
+            if (hit.collider.GetComponent<Outline>())
+            {
+                temp_Blackhole_RingOutline = hit.collider.GetComponent<Outline>();
+                temp_Blackhole_RingOutline.OutlineWidth = 4;
+            }
+
+        }
+        else
+        {
+            //Interact_PressButton_UI.enabled = false;
+            if (temp_Blackhole_RingOutline)
+            {
+                temp_Blackhole_RingOutline.OutlineWidth = 0;
+            }
+        }
+
+        //Logic
+        if(canInteractWithRing && Input.GetKeyDown(pressButtonKey))
+        {
+            temp_Blackhole_Script = hit.collider.GetComponentInParent<BlackHole_Ring_Script>();
+
+            if (!temp_Blackhole_Script.RotationState())
+            {
+                temp_Blackhole_Script.LockRingRotation();
+            }
+        }
+    }
+
+
     void KeypadButtonPress()
     {
         RaycastHit hit;
@@ -181,15 +300,15 @@ public class Player_Controller_Script : MonoBehaviour
         if (canPressButton)
         {
             Interact_PressButton_UI.enabled = true;
-            tempHolderK = hit.collider.GetComponent<Outline>();
-            tempHolderK.OutlineWidth = 4;
+            tempHolder_Kp = hit.collider.GetComponent<Outline>();
+            tempHolder_Kp.OutlineWidth = 4;
         }
         else
         {
-            Interact_PressButton_UI.enabled = false;
-            if (tempHolderK)
+            //Interact_PressButton_UI.enabled = false;
+            if (tempHolder_Kp)
             {
-                tempHolderK.OutlineWidth = 0;
+                tempHolder_Kp.OutlineWidth = 0;
             }
 
         }
@@ -200,6 +319,40 @@ public class Player_Controller_Script : MonoBehaviour
             Keypad_Button_Script KB = hit.collider.GetComponent<Keypad_Button_Script>();
             string keyValue = KB.keypad_Num.ToString();
             KB.ReturnKeyPadObj().AppendKeypadInput(keyValue);
+        }
+    }
+
+
+    void ElevatorTravelKeypadButton_Press()
+    {
+        RaycastHit hit;
+        canPressElevatorTravelButton = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2f, pressElevatorTravelButtonMask) ;
+
+        //Update Player UI
+        if (canPressElevatorTravelButton)
+        {
+            Interact_PressButton_UI.enabled = true;
+            tempHolder_ETB = hit.collider.GetComponent<Outline>();
+            tempHolder_ETB.OutlineWidth = 4;
+        }
+        else
+        {
+            //Interact_PressButton_UI.enabled = false;
+            if (tempHolder_ETB)
+            {
+                tempHolder_ETB.OutlineWidth = 0;
+            }
+        }
+
+        //Logic
+        if(canPressElevatorTravelButton && Input.GetKeyDown(pressButtonKey))
+        {
+            Elevator_Travel_Button_Script _Travel_Button_Script = hit.collider.GetComponent<Elevator_Travel_Button_Script>();
+
+            if (event_Manager.ElevatorTravelCommand_DESERT_DOME(_Travel_Button_Script.travelValue))
+            {
+                sitting_Elevator = true;
+            }
         }
     }
 
@@ -246,18 +399,30 @@ public class Player_Controller_Script : MonoBehaviour
     }
     void ControlDrag()
     {
-        if(playerState == PlayerState.Walk)
+
+        if (playerState == PlayerState.Walk)
         {
             if (isGrounded)
             {
+                falling = false;
                 rb.drag = groundedDrag;
                 moveSpeed = walkSpeed;
             }
             else
             {
-                rb.drag = airDrag;
-                moveSpeed = airSpeed;
+                //Player Gravity
                 rb.AddForce(-orientation.up * gravityMultiplier, ForceMode.Force);
+
+                if (falling == false)
+                {
+                    fallingDrag = airDrag;
+                    moveSpeed = airSpeed;
+                    falling = true;
+                }
+
+                fallingDrag -= Time.deltaTime;
+                fallingDrag = Mathf.Clamp(fallingDrag, 0, airDrag);
+                rb.drag = fallingDrag;
             }
         }
         else if (playerState == PlayerState.Swim)
@@ -311,11 +476,27 @@ public class Player_Controller_Script : MonoBehaviour
         }
     }
 
+    void Sit_In_Elevator()
+    {
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        //transform.position = elevatorSeat.position;
+        rb.MovePosition(elevatorSeat.position);
+    }
+    public void ExitSeat_Elevator()
+    {
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        sitting_Elevator = false;
 
-    //Checks if player is under water
+    }
+
+
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Water_Volume")
+        //Checks if player is under water
+        if (other.tag == "Water_Volume")
         {
             playerState = PlayerState.Swim;
         }
@@ -328,6 +509,7 @@ public class Player_Controller_Script : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        //Checks if player is under water
         if (other.tag == "Water_Volume")
         {
             playerState = PlayerState.Walk;
@@ -340,4 +522,5 @@ public class Player_Controller_Script : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         grabDelay = false;
     }
+
 }
