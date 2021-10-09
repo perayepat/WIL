@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1666186674, guid: 68c7e4565cde54155bb78d8e935f1ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cacheType: 2
+  lastUpdatedAtString: 2021-10-09T19:12:06.359+02:00
+  initializedAtString: 2021-10-09T19:03:03.473+02:00
+  localBranches:
+  - name: main
+    tracking: origin/main
+  - name: UI_Visuals
+    tracking: origin/UI_Visuals
+  remoteBranches:
+  - name: origin/HEAD
+    tracking: '[None]'
+  - name: origin/main
+    tracking: '[None]'
+  - name: origin/UI_Visuals
+    tracking: '[None]'
+  remotes:
+  - name: origin
+    url: https://github.com/perayepat/WIL.git
+    login: 
+    user: 
+    host: 
+    function: 0
+    token: 
+  localConfigBranches:
+    keys:
+    - main
+    - UI_Visuals
+    values:
+    - name: main
+      remote:
+        name: origin
+        url: https://github.com/perayepat/WIL.git
+      trackingBranch: main
+    - name: UI_Visuals
+      remote:
+        name: origin
+        url: https://github.com/perayepat/WIL.git
+      trackingBranch: UI_Visuals
+  remoteConfigBranches:
+    keys:
+    - origin
+    subKeys:
+    - Values:
+      - HEAD
+      - main
+      - UI_Visuals
+    subKeyValues:
+    - Values:
+      - name: HEAD
+        remote:
+          name: origin
+          url: https://github.com/perayepat/WIL.git
+        trackingBranch: 
+      - name: main
+        remote:
+          name: origin
+          url: https://github.com/perayepat/WIL.git
+        trackingBranch: 
+      - name: UI_Visuals
+        remote:
+          name: origin
+          url: https://github.com/perayepat/WIL.git
+        trackingBranch: 
+  configRemotes:
+    keys:
+    - origin
+    values:
+    - name: origin
+      url: https://github.com/perayepat/WIL.git
