@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cacheType: 2
-  lastUpdatedAtString: 2021-10-09T19:12:06.359+02:00
-  initializedAtString: 2021-10-09T19:03:03.473+02:00
+  lastUpdatedAtString: 2021-10-10T18:21:02.152+02:00
+  initializedAtString: 2021-10-10T18:21:01.245+02:00
   localBranches:
   - name: main
     tracking: origin/main
-  - name: UI_Visuals
-    tracking: origin/UI_Visuals
   remoteBranches:
   - name: origin/HEAD
     tracking: '[None]'
@@ -38,18 +36,12 @@ MonoBehaviour:
   localConfigBranches:
     keys:
     - main
-    - UI_Visuals
     values:
     - name: main
       remote:
         name: origin
         url: https://github.com/perayepat/WIL.git
       trackingBranch: main
-    - name: UI_Visuals
-      remote:
-        name: origin
-        url: https://github.com/perayepat/WIL.git
-      trackingBranch: UI_Visuals
   remoteConfigBranches:
     keys:
     - origin
