@@ -11,6 +11,9 @@ public class Player_Controller_Script : MonoBehaviour
     [SerializeField] Transform playerCam;
     float playerHeight = 2f;
 
+    [Header("Health")]
+    [SerializeField] float health = 100;
+
     [Header("Movement")]
     public float moveSpeed = 6f;
     [SerializeField] float walkSpeed = 6f;
@@ -102,6 +105,14 @@ public class Player_Controller_Script : MonoBehaviour
         Zero_Gravity
     }
     [SerializeField] PlayerState playerState;
+
+
+    public enum PlayerEnvironmentState
+    {
+        InDesert,
+        Not_InDesert
+    }
+    public PlayerEnvironmentState playerEnvironmentState;
 
 
 
@@ -213,6 +224,17 @@ public class Player_Controller_Script : MonoBehaviour
             //grabItem.transform.position = grabPoint.position;
             grabItem.velocity = 50 * (grabPoint.position - grabItem.transform.position);
         }
+    }
+
+
+
+    public void DamagePlayerHealth(float healthEffect)
+    {
+        health -= healthEffect;
+    }
+    public float RetrievePlayerHealth()
+    {
+        return health;
     }
 
 
@@ -493,7 +515,7 @@ public class Player_Controller_Script : MonoBehaviour
 
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         //Checks if player is under water
         if (other.tag == "Water_Volume")
@@ -504,6 +526,17 @@ public class Player_Controller_Script : MonoBehaviour
         {
             playerState = PlayerState.Walk;
         }
+
+
+        //Checks if player is in the desert
+        if (other.tag == "Desert_Volume")
+        {
+            playerEnvironmentState = PlayerEnvironmentState.InDesert;
+        }
+        else
+        {
+            playerEnvironmentState = PlayerEnvironmentState.Not_InDesert;
+        }
     }
 
 
@@ -513,6 +546,12 @@ public class Player_Controller_Script : MonoBehaviour
         if (other.tag == "Water_Volume")
         {
             playerState = PlayerState.Walk;
+        }
+
+        //Checks if player is in the desert
+        if (other.tag == "Desert_Volume")
+        {
+            playerEnvironmentState = PlayerEnvironmentState.Not_InDesert;
         }
     }
 

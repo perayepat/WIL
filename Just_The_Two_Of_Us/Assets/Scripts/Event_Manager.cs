@@ -42,6 +42,7 @@ public class Event_Manager : MonoBehaviour
     void Start()
     {
         _Manager = GetComponent<Game_Manager>();
+        fade_BG_Anim.Play("Fade_Out");
     }
 
     // Update is called once per frame
@@ -168,5 +169,11 @@ public class Event_Manager : MonoBehaviour
 
         fade_BG_Anim.Play("Fade_Out");
         _Manager.NewPlayerPosition(_Manager.mainHubSpawnPoint);
+    }
+
+
+    public void RestartGameFadeOut()
+    {
+        fade_BG_Anim.Play("Fade_In");
     }
 }
