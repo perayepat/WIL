@@ -9,6 +9,9 @@ TagManager:
   - Keycard
   - Elevator_Collision_Trigger
   - Desert_Volume
+  - Bomb
+  - Power_Supply
+  - Power_Cell
   layers:
   - Default
   - TransparentFX
@@ -26,11 +29,11 @@ TagManager:
   - Elevator_Travel_Keypad_Button
   - BlackHole_Ring
   - Elevator_ICE_DOME_EXIT
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Laser_Button
+  - Teleport_Button
+  - Bomb_Volume
+  - Color_Button
+  - Core_Button
   - 
   - 
   - 

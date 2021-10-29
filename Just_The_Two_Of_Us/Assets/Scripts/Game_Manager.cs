@@ -18,6 +18,7 @@ public class Game_Manager : MonoBehaviour
     [Header("Temperature Data")]
     public float currentTemperature = -10;
     public float localTemperature;
+    public float desertTemperature;
     [SerializeField] float TempIncreaseInterval_sec = 5;
     [SerializeField] float worldTime = 0;
     [SerializeField] float initialDesertTemperature = 38;
@@ -103,9 +104,11 @@ public class Game_Manager : MonoBehaviour
         time = 0;
 
         localTemperature = temperatureEffect + currentTemperature;
+        desertTemperature = initialDesertTemperature + currentTemperature;
 
         temperature_UI.text = localTemperature.ToString("0");
     }
+
 
 
 
@@ -120,7 +123,7 @@ public class Game_Manager : MonoBehaviour
 
 
 
-    void KillPlayer()
+    public void KillPlayer()
     {
         @event.RestartGameFadeOut();
         StartCoroutine(RestartGame());

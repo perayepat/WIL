@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637694756344412428
-    m_Hash: 3378195028
+      ticks: 637703107418872513
+    m_Hash: 2766874864
   m_LockFileStatus:
     m_FilePath: C:/Users/jaden/OneDrive/Documents/GitHub/WIL/Just_The_Two_Of_Us/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637694758065893196
-    m_Hash: 2251146364
+      ticks: 637703107421506128
+    m_Hash: 3087305119
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
@@ -538,6 +538,83 @@ m_PackageAssets:
         url: https://github.com/Unity-Technologies/com.unity.probuilder.git
         revision: 27f52072e5f94638d1f81bc53df38e59d5bac785
         path: 
+    - packageId: com.unity.progrids@3.0.3-preview.6
+      testable: 0
+      isDirectDependency: 1
+      version: 3.0.3-preview.6
+      source: 1
+      resolvedPath: C:\Users\jaden\OneDrive\Documents\GitHub\WIL\Just_The_Two_Of_Us\Library\PackageCache\com.unity.progrids@3.0.3-preview.6
+      assetPath: Packages/com.unity.progrids
+      name: com.unity.progrids
+      displayName: ProGrids
+      author:
+        name: 
+        email: 
+        url: 
+      category: 
+      type: 
+      description: 'Advanced grid and object snapping for the scene view. ProGrids
+        is a dynamically placed grid, available on all 3 axes and at any position
+        in the scene.
+
+
+        ProGrids snaps objects in world space, ensuring consistent
+        placement of objects in your level.
+
+
+        In addition, ProGrids is completely
+        customizable. Change the colors of your grid, the snap sizing, unit of measurement,
+        and more!'
+      status: 4
+      errors: []
+      versions:
+        all:
+        - 3.0.1-preview
+        - 3.0.2-preview
+        - 3.0.3-preview.0
+        - 3.0.3-preview.4
+        - 3.0.3-preview.5
+        - 3.0.3-preview.6
+        compatible:
+        - 3.0.1-preview
+        - 3.0.2-preview
+        - 3.0.3-preview.0
+        - 3.0.3-preview.4
+        - 3.0.3-preview.5
+        - 3.0.3-preview.6
+        verified: 
+      dependencies:
+      - name: com.unity.settings-manager
+        version: 1.0.2
+      resolvedDependencies:
+      - name: com.unity.settings-manager
+        version: 1.0.3
+      keywords:
+      - grid
+      - snap
+      - manipulation
+      - array
+      - align
+      registry:
+        id: main
+        name: 
+        url: https://packages.unity.com
+        scopes: []
+        isDefault: 1
+        capabilities: 7
+      hasRegistry: 1
+      hideInEditor: 1
+      entitlements:
+        isAllowed: 1
+      isAssetStorePackage: 0
+      datePublishedTicks: 637209307060000000
+      documentationUrl: 
+      hasRepository: 1
+      repository:
+        type: git
+        url: git+https://github.com/Unity-Technologies/com.unity.progrids.git
+        revision: 381f2b0b5dda11525d53e2c608284a3f68d1beff
+        path: 
     - packageId: com.unity.render-pipelines.universal@10.6.0
       testable: 0
       isDirectDependency: 1
@@ -705,9 +782,11 @@ m_PackageAssets:
         - 1.1.26
         - 1.1.27
         - 1.1.29
+        - 1.1.30
         compatible:
         - 1.1.29
-        verified: 1.1.29
+        - 1.1.30
+        verified: 1.1.30
       dependencies:
       - name: com.unity.ext.nunit
         version: 1.0.6
@@ -2957,6 +3036,7 @@ m_PackageAssets:
         - 1.1.0-preview.1
         - 1.1.0
         - 1.2.1
+        - 1.2.4
         compatible:
         - 0.0.12-preview.2
         - 0.0.12-preview.5
@@ -2972,7 +3052,8 @@ m_PackageAssets:
         - 1.1.0-preview.1
         - 1.1.0
         - 1.2.1
-        verified: 1.2.1
+        - 1.2.4
+        verified: 1.2.4
       dependencies: []
       resolvedDependencies: []
       keywords:
@@ -3115,8 +3196,10 @@ m_PackageAssets:
         - 10.5.0
         - 10.5.1
         - 10.6.0
+        - 10.7.0
         compatible:
         - 10.6.0
+        - 10.7.0
         verified: 10.6.0
       dependencies:
       - name: com.unity.ugui
@@ -3264,8 +3347,10 @@ m_PackageAssets:
         - 10.5.0
         - 10.5.1
         - 10.6.0
+        - 10.7.0
         compatible:
         - 10.6.0
+        - 10.7.0
         verified: 10.6.0
       dependencies:
       - name: com.unity.render-pipelines.core
@@ -3397,6 +3482,7 @@ m_PackageAssets:
         - 4.3.2
         - 4.6.0-preview
         - 4.7.0-preview
+        - 4.9.1
         compatible:
         - 4.0.0-preview
         - 4.0.0
@@ -3412,6 +3498,7 @@ m_PackageAssets:
         - 4.3.2
         - 4.6.0-preview
         - 4.7.0-preview
+        - 4.9.1
         verified: 4.3.2
       dependencies: []
       resolvedDependencies: []

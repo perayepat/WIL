@@ -52,6 +52,8 @@ public class Player_Controller_Script : MonoBehaviour
     public Rigidbody grabItem;
     Outline tempHolderG;
     [SerializeField] float grabHoldDist = 1.5f;
+    [SerializeField] float Min_HoldDist = 1;
+    [SerializeField] float Max_HoldDist = 1.5f;
     [SerializeField] bool canGrab;
     [SerializeField] bool holding = false;
     [SerializeField] bool grabDelay = false;
@@ -61,12 +63,24 @@ public class Player_Controller_Script : MonoBehaviour
     [SerializeField] LayerMask pressButtonMask;
     [SerializeField] LayerMask pressElevatorTravelButtonMask;
     [SerializeField] LayerMask pressElevatorICEDOWE_EXITButtonMask;
+    [SerializeField] LayerMask pressLaser_ButtonMask;
+    [SerializeField] LayerMask pressTeleport_ButtonMask;
+    [SerializeField] LayerMask pressColor_ButtonMask;
+    [SerializeField] LayerMask pressCore_ButtonMask;
     [SerializeField] bool canPressButton;
     [SerializeField] bool canPressElevatorTravelButton;
     [SerializeField] bool canPressICEDOWE_EXITButton;
+    [SerializeField] bool canPressLaserActivateButton;
+    [SerializeField] bool canPressTeleportButton;
+    [SerializeField] bool canPressColorButton;
+    [SerializeField] bool canPressCoreButton;
     Outline tempHolder_Kp;
     Outline tempHolder_ETB;
     Outline tempHolderK_IDEB;
+    Outline tempHolderK_LBP;
+    Outline tempHolderK_TPB;
+    Outline tempHolderK_CB;
+    Outline tempHolderK_CoreB;
 
     [Header("BlackHole_Puzzle")]
     [SerializeField] LayerMask blackHoleRingMask;
@@ -151,7 +165,7 @@ public class Player_Controller_Script : MonoBehaviour
 
 
         //UI Check
-        if(!canPressButton && !canPressElevatorTravelButton && !canPressICEDOWE_EXITButton && !canInteractWithRing)
+        if(!canPressButton && !canPressElevatorTravelButton && !canPressICEDOWE_EXITButton && !canInteractWithRing && !canPressLaserActivateButton && !canPressTeleportButton && !canPressColorButton)
         {
             Interact_PressButton_UI.enabled = false;
         }
@@ -160,6 +174,17 @@ public class Player_Controller_Script : MonoBehaviour
         //Keypad Button Press Logic
         KeypadButtonPress();
 
+        //Core Lever Press
+        CoreButtonPress();
+
+        //Color Button Press Logic (Recharge Station Button)
+        ColorButtonPress();
+
+        //Laser Activate Press Logic
+        PressLaserButton();
+
+        //Teleport Button Press Logic
+        PressTeleportButton();
 
         //ICE DOME Elevator Exit Keypad Logic
         InteractICEDOME_Exit_Button();
@@ -313,6 +338,87 @@ public class Player_Controller_Script : MonoBehaviour
     }
 
 
+
+    //Recharge Station Color Button
+    void ColorButtonPress()
+    {
+        RaycastHit hit;
+        canPressColorButton = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2.5f, pressColor_ButtonMask);
+
+        //Update Player UI
+        if (canPressColorButton)
+        {
+            Interact_PressButton_UI.enabled = true;
+            tempHolderK_CB = hit.collider.GetComponent<Outline>();
+            tempHolderK_CB.OutlineWidth = 4;
+        }
+        else
+        {
+            //Interact_PressButton_UI.enabled = false;
+            if (tempHolderK_CB)
+            {
+                tempHolderK_CB.OutlineWidth = 0;
+            }
+
+        }
+
+        //Logic
+        if (canPressColorButton && Input.GetKeyDown(pressButtonKey))
+        {
+            Recharge_Station_Button_Script _RSBS = hit.collider.GetComponent<Recharge_Station_Button_Script>();
+
+            if(_RSBS.button_Type == Recharge_Station_Button_Script.Button_Type.Enter)
+            {
+                _RSBS.PressEnterButton();
+            }
+            else if(_RSBS.button_Type == Recharge_Station_Button_Script.Button_Type.Reset)
+            {
+                _RSBS.PressResetButton();
+            }
+            else if(_RSBS.button_Type == Recharge_Station_Button_Script.Button_Type.Color)
+            {
+                _RSBS.PressColorButton();
+            }
+        }
+    }
+
+
+
+
+    void CoreButtonPress()
+    {
+        RaycastHit hit;
+        canPressCoreButton = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2.5f, pressCore_ButtonMask);
+
+        //Update Player UI
+        if (canPressCoreButton)
+        {
+            Interact_PressButton_UI.enabled = true;
+            tempHolderK_CoreB = hit.collider.GetComponent<Outline>();
+            tempHolderK_CoreB.OutlineWidth = 4;
+        }
+        else
+        {
+            //Interact_PressButton_UI.enabled = false;
+            if (tempHolderK_CoreB)
+            {
+                tempHolderK_CoreB.OutlineWidth = 0;
+            }
+
+        }
+
+        //Logic
+        if (canPressCoreButton && Input.GetKeyDown(pressButtonKey))
+        {
+            Core_Button_Press_Script coreButtonPress = hit.collider.GetComponent<Core_Button_Press_Script>();
+            coreButtonPress.CoreButtonPressed();
+        }
+    }
+
+
+
+
+
     void KeypadButtonPress()
     {
         RaycastHit hit;
@@ -379,6 +485,79 @@ public class Player_Controller_Script : MonoBehaviour
     }
 
 
+
+    void PressLaserButton()
+    {
+        RaycastHit hit;
+        canPressLaserActivateButton = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2.5f, pressLaser_ButtonMask);
+
+        //Update Player UI
+        if (canPressLaserActivateButton)
+        {
+            Interact_PressButton_UI.enabled = true;
+            tempHolderK_LBP = hit.collider.GetComponent<Outline>();
+            tempHolderK_LBP.OutlineWidth = 4;
+        }
+        else
+        {
+            //Interact_PressButton_UI.enabled = false;
+            if (tempHolderK_LBP)
+            {
+                tempHolderK_LBP.OutlineWidth = 0;
+            }
+
+        }
+
+        //Logic
+        if (canPressLaserActivateButton && Input.GetKeyDown(pressButtonKey))
+        {
+            event_Manager.ActivateLaserFire();
+        }
+    }
+
+
+
+    void PressTeleportButton()
+    {
+        RaycastHit hit;
+        canPressTeleportButton = Physics.Raycast(playerCam.position, playerCam.forward, out hit, 2.5f, pressTeleport_ButtonMask);
+
+        //Update Player UI
+        if (canPressTeleportButton)
+        {
+            Interact_PressButton_UI.enabled = true;
+            tempHolderK_TPB = hit.collider.GetComponent<Outline>();
+            tempHolderK_TPB.OutlineWidth = 4;
+        }
+        else
+        {
+            //Interact_PressButton_UI.enabled = false;
+            if (tempHolderK_TPB)
+            {
+                tempHolderK_TPB.OutlineWidth = 0;
+            }
+
+        }
+
+        //Logic
+        if (canPressTeleportButton && Input.GetKeyDown(pressButtonKey))
+        {
+            Teleport_Button_ID teleport_Button_ = hit.collider.GetComponent<Teleport_Button_ID>();
+            
+            if(teleport_Button_.teleporter_ID == "Sender")
+            {
+                event_Manager.ActivateTeleport_LaserToMainHUB();
+            }
+            else if (teleport_Button_.teleporter_ID == "Receiver")
+            {
+                event_Manager.ActivateTeleport_ReceiveLaser();
+            }
+        }
+    }
+
+
+
+
     void PlayerInput(RaycastHit hit)
     {
         horiMovement = Input.GetAxisRaw("Horizontal");
@@ -390,30 +569,106 @@ public class Player_Controller_Script : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") != 0f) // forward
         {
             grabHoldDist += Input.GetAxis("Mouse ScrollWheel");
-            grabHoldDist = Mathf.Clamp(grabHoldDist, 0.8f, 1.5f);
+            grabHoldDist = Mathf.Clamp(grabHoldDist, Min_HoldDist, Max_HoldDist);
         }
 
-        grabPoint.localPosition = new Vector3(0, 0, grabHoldDist);
+
+
+
+        //Drop Item if moved to far from center of screen
+        if(!canGrab && holding)
+        {
+            //Only for Energy Cell (Check if holding item)
+            if (grabItem.GetComponent<Energy_Cell_Script>())
+            {
+                grabItem.GetComponent<Energy_Cell_Script>().inHand = false;
+            }
+
+
+
+            grabItem.useGravity = true;
+            //grabItem.GetComponent<BoxCollider>().isTrigger = false;
+            holding = false;
+            grabItem = null;
+
+
+            StopCoroutine(GrabDelay());
+            StartCoroutine(GrabDelay());
+        }
+
+  
+
+
+
+
+        //Check if Holding a Big Item
+        if (grabItem != null && holding)
+        {
+            if (hit.rigidbody.tag == "Bomb")
+            {
+                grabPoint.localPosition = new Vector3(0, 0, 2.5f);
+            }
+            else
+            {
+                grabPoint.localPosition = new Vector3(0, 0, grabHoldDist);
+            }
+        }
+
+
 
 
         //For Grabbing Items
         if (Input.GetKeyDown(grabKey) && canGrab && grabDelay == false && holding == false)
         {
-            grabHoldDist = 1.5f;
-            grabItem = hit.rigidbody;
-            grabItem.useGravity = false;
-            //grabItem.GetComponent<BoxCollider>().isTrigger = true;
-            holding = true;
+            if(hit.collider.tag == "Power_Cell" && hit.collider.GetComponent<Energy_Cell_Script>())
+            {
+                if(hit.collider.GetComponent<Energy_Cell_Script>().inChamber == false)
+                {
+                    grabHoldDist = 1.5f;
+                    grabItem = hit.rigidbody;
+                    grabItem.useGravity = false;
+                    //grabItem.GetComponent<BoxCollider>().isTrigger = true;
+                    holding = true;
+
+                    grabItem.GetComponent<Energy_Cell_Script>().inHand = true;
+                }
+            }
+            else
+            {
+                grabHoldDist = 1.5f;
+                grabItem = hit.rigidbody;
+                grabItem.useGravity = false;
+                //grabItem.GetComponent<BoxCollider>().isTrigger = true;
+                holding = true;
+            }
+
+
+
+            ////Only for Energy Cell (Check if holding item)
+            //if (grabItem.GetComponent<Energy_Cell_Script>())
+            //{
+            //    grabItem.GetComponent<Energy_Cell_Script>().inHand = true;
+            //}
+
 
             StopCoroutine(GrabDelay());
             StartCoroutine(GrabDelay());
         }
         else if(Input.GetKeyDown(grabKey) && holding && grabDelay == false)
         {
+            //Only for Energy Cell (Check if holding item)
+            if (grabItem.GetComponent<Energy_Cell_Script>())
+            {
+                grabItem.GetComponent<Energy_Cell_Script>().inHand = false;
+            }
+
+
+
             grabItem.useGravity = true;
             //grabItem.GetComponent<BoxCollider>().isTrigger = false;
             holding = false;
             grabItem = null;
+
 
             StopCoroutine(GrabDelay());
             StartCoroutine(GrabDelay());

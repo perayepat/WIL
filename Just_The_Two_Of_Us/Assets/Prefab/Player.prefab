@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 5632292486403909384}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -222,6 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 5632292485790026309}
   playerCam: {fileID: 0}
+  health: 100
   moveSpeed: 6
   walkSpeed: 6
   airSpeed: 2
@@ -260,6 +261,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   canPressButton: 0
+  canPressElevatorTravelButton: 0
+  canPressICEDOWE_EXITButton: 0
   blackHoleRingMask:
     serializedVersion: 2
     m_Bits: 16384
@@ -271,6 +274,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1216
   playerState: 0
+  playerEnvironmentState: 0
 --- !u!114 &5632292486403909384
 MonoBehaviour:
   m_ObjectHideFlags: 0
