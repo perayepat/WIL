@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afc162a9911cb0346854335e94edd664, type: 3}
+  m_Name: defualtUI
+  m_EditorClassIdentifier: 
+  temperature: 0
+  InvetorySize: 0
+  TempgaugeColors: []
+  PlayerCondition: []
+  InventortyImages: []
+  health: 100
+  sLevels: 0
+  dLelevels: 0
+  Interact_Grab_UI: {fileID: 0}
+  Interact_PressButton_UI: {fileID: 0}
+  Health_UI: {fileID: 0}
+  Minimap: {fileID: 1136535984168339704, guid: e4a91a38f5df66d48a0959fcb53fafe2, type: 3}
+  TempratureGauge: {fileID: 0}
+  HealthGauge: {fileID: 0}
+  InteractableField: {fileID: 0}
