@@ -7,6 +7,7 @@ using TMPro;
 public class Game_Manager : MonoBehaviour
 {
     Event_Manager @event;
+  
 
     [Header("Player/Spawn Data")]
     [SerializeField] Player_Controller_Script playerObj;
@@ -19,19 +20,20 @@ public class Game_Manager : MonoBehaviour
     public float currentTemperature = -10;
     public float localTemperature;
     public float desertTemperature;
-    [SerializeField] float TempIncreaseInterval_sec = 5;
-    [SerializeField] float worldTime = 0;
-    [SerializeField] float initialDesertTemperature = 38;
-    [SerializeField] float timeInHazardArea;
-    [SerializeField] float healthDecreaseInterval_sec = 5;
-    [SerializeField] float healthDecreaseInterval_Multiplier = 0.5f;
-    private float time = 0;
+    public float TempIncreaseInterval_sec = 5;
+    public float worldTime = 0;
+    public float initialDesertTemperature = 38;
+    public float timeInHazardArea;
+    public float healthDecreaseInterval_sec = 5;
+    public float healthDecreaseInterval_Multiplier = 0.5f;
+    public float time = 0;
+
 
     [Header("UI")]
-    [SerializeField] TextMeshProUGUI temperature_UI;
-    [SerializeField] TextMeshProUGUI playerHealth_UI;
-
-
+    public TextMeshProUGUI Interact_Grab_UI;
+    public TextMeshProUGUI Interact_PressButton_UI;
+    public TextMeshProUGUI temperature_UI;
+    public TextMeshProUGUI playerHealth_UI;
     private void Awake()
     {
         @event = GetComponent<Event_Manager>();
@@ -78,7 +80,7 @@ public class Game_Manager : MonoBehaviour
     }
 
 
-    void UpdatePlayerHealth()
+     public void UpdatePlayerHealth()
     {
         if(localTemperature >= 30)
         {
@@ -98,7 +100,7 @@ public class Game_Manager : MonoBehaviour
 
 
 
-    void UpdateTemperatureDataPoints(float temperatureEffect)
+   public void UpdateTemperatureDataPoints(float temperatureEffect)
     {
         currentTemperature += 1;
         time = 0;
@@ -129,7 +131,7 @@ public class Game_Manager : MonoBehaviour
         StartCoroutine(RestartGame());
     }
 
-    IEnumerator RestartGame()
+    public IEnumerator RestartGame()
     {
         yield return new WaitForSeconds(1.5f);
 

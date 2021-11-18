@@ -3,7 +3,27 @@ guid: 7118812cf4fdca7458d282ba602f035e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - UI: {fileID: 11400000, guid: aee538dc27f1f894bb0d7f603be1038e, type: 2}
+  - fade_BG_Anim: {instanceID: 0}
+  - keypad_Instance: {instanceID: 0}
+  - elevatorDoor: {instanceID: 0}
+  - iceOnDoor_Obj: {instanceID: 0}
+  - IceExit_ElevatorDoor: {instanceID: 0}
+  - coreTerminateTimer_UI: {instanceID: 0}
+  - elevatorTravel: {instanceID: 0}
+  - laserDoor: {instanceID: 0}
+  - Laser_Object: {instanceID: 0}
+  - laser_Trail_Anim: {instanceID: 0}
+  - laser_Orb_Anim: {instanceID: 0}
+  - laser_TestDoor_Anim: {instanceID: 0}
+  - laser_BlastDoor_Upper_Anim: {instanceID: 0}
+  - laser_BlastDoor_Lower_Anim: {instanceID: 0}
+  - teleport_Nosle_Desert: {instanceID: 0}
+  - teleport_Nosle_MainHub: {instanceID: 0}
+  - LaserTeleport_Position: {instanceID: 0}
+  - bomb_Obj: {instanceID: 0}
+  - bomb_Orb_Anim: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

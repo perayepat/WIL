@@ -20,6 +20,7 @@ public class Event_Manager : MonoBehaviour
 
     Game_Manager _Manager;
 
+
     [Header("Optional UI Logic")]
     [SerializeField] Animator fade_BG_Anim;
 

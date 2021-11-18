@@ -19,7 +19,13 @@ public class UserInterface : ScriptableObject
         WARM,
         ARRID
     }
+    public enum EnviromentType
+    {
+        THUNDRA,
+        DESERT
+    }
 
+    [SerializeField] Game_Manager manager;
 
     [Header("UI Values")]
     public float temperature;
@@ -27,21 +33,32 @@ public class UserInterface : ScriptableObject
     public List<Color32> TempgaugeColors;
     public List<Image> PlayerCondition;
     public List<Image> InventortyImages;
-    [SerializeField] float health = 100;
     public snowLevels sLevels;
     public desertLevels dLelevels;
-    
+    public EnviromentType enviromentType;
+
+    [Header("Player UI Values")]
+    [SerializeField] float health = 100;
+    [SerializeField] float startingTemp = 0;
+ 
+
 
     [Header("UI")]
-    [SerializeField] TextMeshProUGUI Interact_Grab_UI;
-    [SerializeField] TextMeshProUGUI Interact_PressButton_UI;
-    [SerializeField] TextMeshProUGUI Health_UI;
-    [SerializeField] RawImage Minimap;
+    public TextMeshProUGUI Interact_Grab_UI;
+    public TextMeshProUGUI Interact_PressButton_UI;
+    public TextMeshProUGUI Health_UI;
+    public TextMeshProUGUI temperature_UI;
+    public TextMeshProUGUI playerHealth_UI;
+    public RawImage Minimap;
 
 
     [Header("UI GameObjects")]
     [SerializeField] GameObject TempratureGauge;
     [SerializeField] GameObject HealthGauge;
     [SerializeField] GameObject InteractableField;
+
+    
+
+    
 }
 
